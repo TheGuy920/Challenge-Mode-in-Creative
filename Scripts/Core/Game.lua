@@ -117,20 +117,20 @@ function Game.client_initializePackMenu(self, force)
     self:client_initializeBackground()
 
     if not sm.isHost then
-        self.MenuInstance.pack.gui =
-            sm.gui.createGuiFromLayout(
-            "$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070/Gui/Layouts/ClientLoadingScreen.layout",
-            true,
-            {
-                isHud = true,
-                isInteractive = false,
-                needsCursor = false,
-                hidesHotbar = false,
-                isOverlapped = true,
-                backgroundAlpha = 0.5
-            }
-        )
-        --self.MenuInstance.pack.gui:open()
+        -- self.MenuInstance.pack.gui =
+        --     sm.gui.createGuiFromLayout(
+        --     "$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070/Gui/Layouts/ClientLoadingScreen.layout",
+        --     true,
+        --     {
+        --         isHud = true,
+        --         isInteractive = false,
+        --         needsCursor = false,
+        --         hidesHotbar = false,
+        --         isOverlapped = true,
+        --         backgroundAlpha = 0.5
+        --     }
+        -- )
+        -- self.MenuInstance.pack.gui:open()
     else
         if self.ChallengeData == nil then
             self.ChallengeData = LoadChallengeData()
@@ -910,7 +910,7 @@ function Game.client_onUpdate(self, deltaTime)
         self.MenuInstance.blur.blur_gui:close()
     end
 
-    if self.ready ~= nil and self.loading_screen_lifted then
+    if self.ready ~= nil and self.loading_screen_lifted and sm.isHost then
         if self.ready then
             local dtt = deltaTime
             if self.ready == true then
@@ -973,7 +973,7 @@ function Game.client_onUpdate(self, deltaTime)
             end
         end
     end
-    if self.inverse_camera_interpolate then
+    if self.inverse_camera_interpolate and sm.isHost then
         if sm.exists(self.MenuInstance.blur.gui) then
             self.MenuInstance.blur.gui:close()
             self.MenuInstance.blur.gui:destroy()
@@ -1132,7 +1132,7 @@ function Game.client_onFixedUpdate(self, timeStep)
     if self.failed_tracker == nil then
         self.failed_tracker = 0
     end
-    if self.state == States.PackMenu then
+    if self.state == States.PackMenu and sm.isHost then
         isAnyMenu = true
         if sm.exists(self.MenuInstance.pack.gui) then
             if not self.MenuInstance.pack.gui:isActive() then
@@ -1154,7 +1154,7 @@ function Game.client_onFixedUpdate(self, timeStep)
 
         --self:client_initializePackMenu(true)
         end
-    elseif self.state == States.BuildMenu then
+    elseif self.state == States.BuildMenu and sm.isHost then
         isAnyMenu = true
         if sm.exists(self.MenuInstance.build.gui) then
             if not self.MenuInstance.build.gui:isActive() then
@@ -1167,7 +1167,7 @@ function Game.client_onFixedUpdate(self, timeStep)
             --self:client_initializePlayMenu(true)
             sm.event.sendToGame("client_initializeBuildMenu", true)
         end
-    elseif self.state == States.PlayMenu then
+    elseif self.state == States.PlayMenu and sm.isHost then
         isAnyMenu = true
         if sm.exists(self.MenuInstance.play.gui) then
             if not self.MenuInstance.play.gui:isActive() then
