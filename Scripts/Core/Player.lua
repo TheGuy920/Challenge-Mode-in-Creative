@@ -28,6 +28,7 @@ function Player.cl_n_startFadeToBlack( self, param )
 end
 
 function Player.server_updateGameState( self, State, caller )
+	print("server_updateGameState", caller)
 	if not sm.isServerMode() or caller ~= nil then return end
 	self.state = State
 
