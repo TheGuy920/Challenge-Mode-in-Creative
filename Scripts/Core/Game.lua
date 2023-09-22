@@ -160,9 +160,9 @@ function Game.client_initializePackMenu(self, force)
             end
         end
         self.MenuInstance.pack.ChallengeModeMenuPack_LOADED(self.MenuInstance.pack, 0, force)
-    end
 
-    self.MenuInstance.pack.gui:setFocus("xx01441")
+        self.MenuInstance.pack.gui:setFocus("xx01441")
+    end
 end
 
 function Game.client_exitToMenu(self)
