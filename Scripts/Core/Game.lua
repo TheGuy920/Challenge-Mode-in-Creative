@@ -130,7 +130,7 @@ function Game.client_initializePackMenu(self, force)
                 backgroundAlpha = 0.5
             }
         )
-        self.MenuInstance.pack.gui:open()
+        --self.MenuInstance.pack.gui:open()
     else
         if self.ChallengeData == nil then
             self.ChallengeData = LoadChallengeData()
@@ -1127,7 +1127,7 @@ function Game.client_onFixedUpdate(self, timeStep)
     local isAnyMenu = false
     if not self.has_client_init_once then
         self.has_client_init_once = true
-        print("Modded Challenge Mode Version - 1.10.4")
+        print("Modded Challenge Mode Version - 1.10.6")
     end
     if self.failed_tracker == nil then
         self.failed_tracker = 0
