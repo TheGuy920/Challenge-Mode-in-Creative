@@ -33,9 +33,6 @@ function Game.server_onCreate(self)
     self.ChallengeData = LoadChallengeData()
     self:server_updateGameState(States.PackMenu)
     self.ready = true
-
-    print(sm.challenge.getSaveData( sm.uuid.new("1a52108f-7704-4221-8ba1-bad5c933d7ba") ))
-    print(sm.challenge.getCompletionTime( sm.uuid.new("1a52108f-7704-4221-8ba1-bad5c933d7ba") ))
 end
 
 function Game.client_test(self)
