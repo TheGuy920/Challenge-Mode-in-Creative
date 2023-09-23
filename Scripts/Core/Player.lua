@@ -174,6 +174,7 @@ function Player.server_requestGameState( self, player )
 end
 
 function Player.client_onUpdate(self, dt)
+	local local_player = sm.localPlayer.getPlayer()
 	if not sm.isHost and self.client_updateGameState == nil then
 		for index, value in pairs(Player) do
 			local found = string.find(tostring(type(value)), "function")
@@ -184,8 +185,15 @@ function Player.client_onUpdate(self, dt)
 		return
 	end
 	if self.state == nil and not sm.isHost then
-		self.network:sendToServer("server_requestGameState", sm.localPlayer.getPlayer())
+		self.network:sendToServer("server_requestGameState", local_player)
 		return
+	end
+	if not sm.isHost and self.state == States.PackMenu or self.state == States.PlayMenu or self.state == States.BuildMenu then
+		if local_player.character ~= nil then
+			if local_player.character:getLockingInteractable() ~= nil then
+				local_player.character:setLockingInteractable(nil)
+			end
+		end
 	end
 	if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
 		ChallengePlayer.client_onUpdate(self, deltaTime)
