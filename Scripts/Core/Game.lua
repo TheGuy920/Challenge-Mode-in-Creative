@@ -91,7 +91,7 @@ end
 function Game.client_initializeBackground(self)
     if sm.exists(self.MenuInstance.blur.gui) then
         self.MenuInstance.blur.gui:open()
-    else
+    elseif sm.isHost then
         self.MenuInstance.blur.gui =
             sm.gui.createGuiFromLayout(
             "$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070/Gui/Layouts/darken/darken.layout",
