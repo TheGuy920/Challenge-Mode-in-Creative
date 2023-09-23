@@ -17,7 +17,7 @@ function Player.server_updateGameRules( self, rules )
 end
 
 function Player.server_playerJoined( self, data )
-	self.state = data.state
+	self:server_updateGameState(data.state)
 	if self.sv.spawnparams == nil then
 		ChallengePlayer.sv_init( self )
 	end
@@ -28,7 +28,6 @@ function Player.cl_n_startFadeToBlack( self, param )
 end
 
 function Player.server_updateGameState( self, State, caller )
-	print("server_updateGameState", caller)
 	if not sm.isServerMode() or caller ~= nil then return end
 	self.state = State
 
@@ -39,7 +38,7 @@ function Player.server_updateGameState( self, State, caller )
 		ChallengePlayer.server_onCreate( self )
 		self.network:sendToClient(self.player, "_client_onCreate")
     elseif self.player ~= sm.player.getAllPlayers()[1] then
-		print(self.player, "Whipe Inv")
+		print("WHIPE YUH INVENTORY BOY")
 		sm.container.beginTransaction()
 		local inv = self.player:getInventory()
 		for i = 1, inv:getSize() do
