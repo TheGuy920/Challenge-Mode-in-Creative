@@ -46,13 +46,13 @@
 		 },
 		 {
 			"box" : {
-			   "x" : 40,
-			   "y" : 40,
-			   "z" : 40
+			   "x" : 1,
+			   "y" : 100,
+			   "z" : 12
 			},
 			"color" : "ffffff",
 			"flammable" : false,
-			"name" : "invis_barrier",
+			"name" : "invis_barrierX",
 			"physicsMaterial" : "Glass",
 			"ratings" : {
 			   "buoyancy" : 1,
@@ -63,6 +63,26 @@
 			"renderable" : "$CHALLENGE_DATA/Objects/Renderable/interactive/obj_challenge_interactive_smallgoal.rend",
 			"rotationSet" : "PropYZNegX",
 			"uuid" : "d8669091-5ed8-41af-90dd-60e6f5d1f282"
+		 },
+		 {
+			"box" : {
+			   "x" : 12,
+			   "y" : 100,
+			   "z" : 1
+			},
+			"color" : "ffffff",
+			"flammable" : false,
+			"name" : "invis_barrierY",
+			"physicsMaterial" : "Glass",
+			"ratings" : {
+			   "buoyancy" : 1,
+			   "density" : 1,
+			   "durability" : 1,
+			   "friction" : 1
+			},
+			"renderable" : "$CHALLENGE_DATA/Objects/Renderable/interactive/obj_challenge_interactive_smallgoal.rend",
+			"rotationSet" : "PropYZNegX",
+			"uuid" : "1be96842-cb7d-4748-b159-3dbc61ca1f40"
 		 }
 	]
 }

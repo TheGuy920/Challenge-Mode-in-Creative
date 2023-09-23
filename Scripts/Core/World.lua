@@ -10,28 +10,48 @@ World.renderMode = "challenge"
 World.isStatic = true
 World.enableCreations = false
 local MenuLockUuid = sm.uuid.new("b9e418dd-5875-4ca6-85f1-48154fa81643")
-local BarrierUuid = sm.uuid.new("d8669091-5ed8-41af-90dd-60e6f5d1f282")
+local BarrierUuidX = sm.uuid.new("d8669091-5ed8-41af-90dd-60e6f5d1f282")
+local BarrierUuidY = sm.uuid.new("1be96842-cb7d-4748-b159-3dbc61ca1f40")
+local OrderList = {
+	BarrierUuidX,
+	BarrierUuidX,
+	BarrierUuidY,
+	BarrierUuidY
+}
+local posOffset = {
+	sm.vec3.new(-0.5,0,0),
+	sm.vec3.new(0.5,0,0),
+	sm.vec3.new(0,-0.5,0),
+	sm.vec3.new(0,0.5,0)
+}
 
 function World.server_onCreate( self )
     print("World.server_onCreate")
     sm.event.sendToGame("server_worldScriptReady")
 	self.menu_lock = nil
-	self.barrier = nil
+	self.barrier = {}
 	for _,body in pairs(sm.body.getAllBodies()) do
 		for _,shape in pairs(body:getShapes()) do
 			if shape.uuid == MenuLockUuid then
 				self.menu_lock = shape:getInteractable()
 			end
 			if shape.uuid == BarrierUuid then
-				self.barrier = shape
+				table.insert(self.barrier, shape)
 			end
 		end
 	end
 	if self.menu_lock == nil then
 		self.menu_lock = sm.shape.createPart( MenuLockUuid, sm.vec3.new(0,0,-500), nil, false, true ):getInteractable()
 	end
-	if self.barrier == nil then
-		self.barrier = sm.shape.createPart( BarrierUuid, sm.vec3.new(0.8375-5, -112.725-5, 6), nil, false, true )
+	if #self.barrier ~= 4 then
+		for _,shape in pairs(self.barrier) do
+			shape:destroyShape()
+		end
+		self.barrier = {}
+		for index = 1, 4 do
+			print(index)
+			table.insert(self.barrier, sm.shape.createPart( OrderList[index], sm.vec3.new(0.8375, -112.725, 0) + posOffset[index], nil, false, true ))
+		end
 	end
 	local host = sm.player.getAllPlayers()[1]
 	for _,player in pairs(sm.player.getAllPlayers()) do
