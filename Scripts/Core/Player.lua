@@ -43,7 +43,6 @@ function Player.server_updateGameState( self, State, caller )
 		for i = 1, inv:getSize() do
 			sm.container.setItem(inv, i - 1, sm.uuid.getNil(), 1)
 		end
-		sm.container.setItem(inv, 0, sm.uuid.new("9d4d51b5-f3a5-407f-a030-138cdcf30b4e"), 1)
 		sm.container.endTransaction()
 	end
 end
