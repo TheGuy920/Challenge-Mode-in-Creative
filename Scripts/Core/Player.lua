@@ -47,15 +47,6 @@ function Player.server_updateGameState(self, State, caller)
 		end
 		sm.container.endTransaction()
 	end
-
-	if self.client_updateGameState == nil then
-		for index, value in pairs(Player) do
-			local found = string.find(tostring(type(value)), "function")
-			if found then
-				self[index] = value
-			end
-		end
-	end
 end
 
 function Player.client_updateGameState(self, State, caller)
@@ -172,8 +163,18 @@ function Player.client_onFixedUpdate(self, timeStep)
 end
 
 function Player.client_onUpdate(self, deltaTime)
-	if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
-		ChallengePlayer.client_onUpdate(self, deltaTime)
+	if self.client_updateGameState == nil then
+		for index, value in pairs(Player) do
+			local found = string.find(tostring(type(value)), "function")
+			if found then
+				self[index] = value
+			end
+		end
+	end
+	self.client_onUpdate = function( self, deltaTime )
+		if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
+			ChallengePlayer.client_onUpdate(self, deltaTime)
+		end
 	end
 end
 
