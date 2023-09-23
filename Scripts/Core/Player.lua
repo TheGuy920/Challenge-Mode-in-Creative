@@ -83,6 +83,7 @@ function Player._client_onCreate( self )
 end
 
 function Player.client_onCreate( self )
+	print("HELLO???")
 	ChallengePlayer.client_onCreate( self )
 end
 
