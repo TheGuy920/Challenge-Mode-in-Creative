@@ -19,10 +19,10 @@ local OrderList = {
 	BarrierUuidY
 }
 local posOffset = {
-	sm.vec3.new(-0.4,0,0),
-	sm.vec3.new(0.4,0,0),
-	sm.vec3.new(0,-0.4,0),
-	sm.vec3.new(0,0.4,0)
+	sm.vec3.new(-0.5,0,0),
+	sm.vec3.new(0.35,0,0),
+	sm.vec3.new(0,-0.45,0),
+	sm.vec3.new(0,0.45,0)
 }
 
 function World.server_onCreate( self )

@@ -52,7 +52,7 @@
 			"box" : {
 			   "x" : 1,
 			   "y" : 1,
-			   "z" : 1
+			   "z" : 60
 			},
 			"color" : "ffffff",
 			"flammable" : false,
@@ -76,7 +76,7 @@
 			"box" : {
 			   "x" : 1,
 			   "y" : 1,
-			   "z" : 1
+			   "z" : 60
 			},
 			"color" : "ffffff",
 			"flammable" : false,
