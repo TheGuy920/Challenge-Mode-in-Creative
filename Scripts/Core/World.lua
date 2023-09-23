@@ -25,17 +25,25 @@ function World.server_onCreate( self )
 	if self.menu_lock == nil then
 		self.menu_lock = sm.shape.createPart( MenuLockUuid, sm.vec3.new(0,0,-500), nil, false, true ):getInteractable()
 	end
-	local player = sm.player.getAllPlayers()[1]
-	--for _,player in pairs(sm.player.getAllPlayers()) do
+	local host = sm.player.getAllPlayers()[1]
+	for _,player in pairs(sm.player.getAllPlayers()) do
 		if player:getCharacter() ~= nil then
-			player.character:setLockingInteractable(self.menu_lock)
+			if player == host then
+				player.character:setLockingInteractable(self.menu_lock)
+			else
+				player.character:setLockingInteractable(nil)
+			end
 		end
-	--end
+	end
 end
 
 
 function World.client_setLighting( self )
 	sm.render.setOutdoorLighting( 0.5 )
+end
+
+function World.server_setMenuLockNil( self, char )
+	char:setLockingInteractable(nil)
 end
 
 function World.server_setMenuLock( self, char )
@@ -125,6 +133,8 @@ function World.server_spawnCharacter( self, params )
 		local char = CreateCharacterOnSpawner( self, self.world, player, {}, sm.vec3.new( 0.8375, -112.725, 6 ), false )
 		if player == sm.player.getAllPlayers()[1] then
 			char:setLockingInteractable(self.menu_lock)
+		else
+			char:setLockingInteractable(nil)
 		end
 		sm.event.sendToPlayer( player, "sv_e_onSpawnCharacter")
 		sm.container.beginTransaction()

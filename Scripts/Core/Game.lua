@@ -697,6 +697,8 @@ function Game.sv_createPlayerCharacter(self, world, x, y, player, params)
             sm.container.setItem(player:getHotbar(), 0, sm.uuid.new("9d4d51b5-f3a5-407f-a030-138cdcf30b4e"), 1)
             sm.container.endTransaction()
             sm.game.setLimitedInventory(true)
+        else
+            sm.event.sendToWorld(world, "server_setMenuLockNil", character)
         end
     end
 end
