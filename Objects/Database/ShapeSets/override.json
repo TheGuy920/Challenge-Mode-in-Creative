@@ -46,9 +46,9 @@
 		 },
 		 {
 			"box" : {
-			   "x" : 10,
-			   "y" : 10,
-			   "z" : 30
+			   "x" : 40,
+			   "y" : 40,
+			   "z" : 40
 			},
 			"color" : "ffffff",
 			"flammable" : false,

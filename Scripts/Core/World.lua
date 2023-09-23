@@ -31,7 +31,7 @@ function World.server_onCreate( self )
 		self.menu_lock = sm.shape.createPart( MenuLockUuid, sm.vec3.new(0,0,-500), nil, false, true ):getInteractable()
 	end
 	if self.barrier == nil then
-		self.barrier = sm.shape.createPart( BarrierUuid, sm.vec3.new(0.8375, -112.725, 6), nil, false, true )
+		self.barrier = sm.shape.createPart( BarrierUuid, sm.vec3.new(0.8375-5, -112.725-5, 6), nil, false, true )
 	end
 	local host = sm.player.getAllPlayers()[1]
 	for _,player in pairs(sm.player.getAllPlayers()) do
