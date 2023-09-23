@@ -214,7 +214,31 @@ function Game.server_exitToMenu2(self, data)
         self:server_updateGameState(States.PackMenu)
         self.ready = true
         self.network:sendToClients("client_closeTmp")
+
+        sm.game.setLimitedInventory(true)
+        for id,player in pairs(sm.player.getAllPlayers()) do
+            local inv = player:getInventory()
+            sm.container.beginTransaction()
+            for i = 1, inv:getSize() do
+                sm.container.setItem(inv, i - 1, sm.uuid.getNil(), 1)
+            end
+            if id == 1 or true then
+                self.network:sendToClient(player, "client_giveHammer")
+            end
+            sm.container.endTransaction()
+        end
     end
+end
+
+function Game.client_giveHammer( self )
+    self.network:sendToServer("server_giveHammer", {p=sm.localPlayer.getPlayer(),s=sm.localPlayer.getSelectedHotbarSlot()})
+end
+
+function Game.server_giveHammer( self, param )
+    local inv = param.p:getInventory()
+    sm.container.beginTransaction()
+    sm.container.setItem(inv, param.s, sm.uuid.new("9d4d51b5-f3a5-407f-a030-138cdcf30b4e"), 1)
+    sm.container.endTransaction()
 end
 
 function Game.client_closeTmp( self, gui )
@@ -684,7 +708,7 @@ function Game.sv_createPlayerCharacter(self, world, x, y, player, params)
     if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
         sm.event.sendToWorld(world, "server_spawnCharacter", {players = {player}, playCutscene = false})
     elseif sm.exists(world) then
-        local vector = sm.vec3.new(0, -95, 5)
+        local vector = sm.vec3.new(0, -90, 5)
         local yaw = math.pi
         if player == sm.host then
             vector = sm.vec3.new(0.8375, -112.725, 6)
