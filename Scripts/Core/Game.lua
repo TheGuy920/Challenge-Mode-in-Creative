@@ -33,6 +33,24 @@ function Game.server_onCreate(self)
     self.ChallengeData = LoadChallengeData()
     self:server_updateGameState(States.PackMenu)
     self.ready = true
+
+    -- Check Detector
+    tools = sm.json.open("$CHALLENGE_DATA/Tools/ToolSets/tools.json")
+    local can_continue = false
+    for _,tool in pairs(tools.toolList) do
+        can_continue = tool.uuid == "a83c0677-1dd3-4343-8a3e-2f2c0c3f8f26"
+        if can_continue then break end
+    end
+    if not can_continue then
+        table.insert(tools.toolList, {
+            uuid= "a83c0677-1dd3-4343-8a3e-2f2c0c3f8f26",
+            previewRenderable= "$GAME_DATA/Character/Char_Tools/char_lift_preview.rend",
+            previewRotation= { 1, 0, 0, 0, 0, -1, 0, 1, 0 },
+            script= { file= "$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070/Scripts/CustomGame/Tools/Detector.lua", class="Detector" },
+            showInInventory= false
+        })
+        sm.old.json.save(tools, "$CHALLENGE_DATA/Tools/ToolSets/tools.json")
+    end
 end
 
 function Game.client_test(self)

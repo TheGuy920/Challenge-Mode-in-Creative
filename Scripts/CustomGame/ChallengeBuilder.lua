@@ -10,7 +10,7 @@ _G["ChallengeBuilder_LoadFunctions"] = function(self)
             init = true
         end
 
-        local local_max = 19
+        local local_max = 22
         local _max = #self.number_index - local_max
         self.offset = max(min(start, _max), 0)
         if self.offset == 4 then self.offset = 5 end
@@ -39,6 +39,12 @@ _G["ChallengeBuilder_LoadFunctions"] = function(self)
                 self.gui:setVisible("SelectBorder_" .. self.selected_index, false)
                 self.gui:setButtonCallback("Challenge_" .. self.selected_index, "client_level_SelectChallenge")
                 self.selected_index = self.selected_index + 1
+            end
+        end
+        if #self.number_index < local_max then
+            local diff = local_max - #self.number_index
+            for i = diff, 0, -1 do
+                self.gui:setVisible("ChallengeItem_"..tostring(i), false)
             end
         end
         _max = #self.number_index - local_max
@@ -138,7 +144,6 @@ _G["ChallengeBuilder_LoadFunctions"] = function(self)
 
     self.client_toggleShowing = function ( self )
         self.toggle = not self.toggle
-        print("MORE BETTER TOGGLE")
         if self.toggle then
             self.gui:setText("Toggle", "LOCAL")
         else
