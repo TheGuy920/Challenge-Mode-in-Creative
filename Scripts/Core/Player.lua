@@ -173,7 +173,7 @@ function Player.server_requestGameState( self, player )
 	end
 end
 
-function Player.client_onUpdate(slf, deltaTime)
+function Player.client_onUpdate(slf, dt)
 	if slf.client_updateGameState == nil and not sm.isHost then
 		for index, value in pairs(Player) do
 			local found = string.find(tostring(type(value)), "function")
