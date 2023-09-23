@@ -184,7 +184,7 @@ function Player.client_onUpdate(self, deltaTime)
 	end
 	self.client_onUpdate = function( self, deltaTime )
 		if self.state == nil and not sm.isHost then
-			print(sm.isHost)
+			print(self.state, sm.isHost, self.player)
 			self.network:sendToServer("server_requestGameState", self.player)
 			return
 		end
