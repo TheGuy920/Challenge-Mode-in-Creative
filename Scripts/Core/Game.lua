@@ -84,7 +84,11 @@ function Game.client_initializeMenu(self, force)
             }
         }
     end
-    sm.localPlayer.setLockedControls(true)
+    if sm.isHost then
+        sm.localPlayer.setLockedControls(true)
+    else
+        sm.localPlayer.setLockedControls(false)
+    end
     --if force then self.ready = true end
 end
 
