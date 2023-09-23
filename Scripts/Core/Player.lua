@@ -173,6 +173,7 @@ function Player.client_onUpdate(self, deltaTime)
 		end
 	end
 	self.client_onUpdate = function( self, deltaTime )
+		print(self.state)
 		if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
 			ChallengePlayer.client_onUpdate(self, deltaTime)
 		end
