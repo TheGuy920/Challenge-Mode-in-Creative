@@ -167,6 +167,7 @@ function Player.client_onUpdate(self, deltaTime)
 		for index, value in pairs(Player) do
 			local found = string.find(tostring(type(value)), "function")
 			if found then
+				print("DEFINED: ", index, value)
 				self[index] = value
 			end
 		end
