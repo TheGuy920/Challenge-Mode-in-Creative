@@ -33,7 +33,7 @@ function Player.server_updateGameState(self, State, caller)
 	end
 	self.state = State
 
-	self.network:sendToClients("client_updateGameState", self.state)
+	self.network:sendToClients("client_updateGameState", State)
 
 	if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
 		self.server_ready = false
@@ -162,18 +162,29 @@ function Player.client_onFixedUpdate(self, timeStep)
 	end
 end
 
+function Player.server_requestGameState( self, player )
+	print("Fetching Game State for", player)
+	if self.state ~= nil then
+		self.network:sendToClient(player, "client_updateGameState", self.state)
+	else
+		sm.event.sendToGame("server_playerScriptReady", player)
+	end
+end
+
 function Player.client_onUpdate(self, deltaTime)
 	if self.client_updateGameState == nil then
 		for index, value in pairs(Player) do
 			local found = string.find(tostring(type(value)), "function")
 			if found then
-				print("DEFINED: ", index, value)
 				self[index] = value
 			end
 		end
 	end
 	self.client_onUpdate = function( self, deltaTime )
-		print(self.state)
+		if self.state == nil then
+			self.network:sendToServer("server_requestGameState", self.player)
+			return
+		end
 		if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
 			ChallengePlayer.client_onUpdate(self, deltaTime)
 		end

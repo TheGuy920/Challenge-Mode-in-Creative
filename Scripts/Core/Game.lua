@@ -600,7 +600,8 @@ function Game.server_playerScriptReady(self, player, caller)
         return
     end
     -- Update Players
-    self:server_updateAllPlayerStates()
+    -- self:server_updateAllPlayerStates()
+    sm.event.sendToPlayer(player, "server_updateGameState", self.state)
 end
 
 function Game.server_updateAllPlayerStates(self, caller)
