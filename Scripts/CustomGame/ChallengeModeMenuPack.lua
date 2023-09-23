@@ -38,7 +38,12 @@ if _G["ChallengeModeMenuPack_LoadFunctions"] == nil then
                             self.gui:setImage("Preview_"..self.selected_index, challenge.image)
                             self.gui:setVisible("PreviewSelectBorder_"..self.selected_index, false)
                             self.gui:setVisible("SelectBorder_"..self.selected_index, false)
-                            self.gui:setText("LeftValue_"..self.selected_index, "0")
+                            if self.times then
+                                local completed = 0
+                                level_times = self.times[challenge.uuid]
+                                for _,time in pairs(level_times) do if time > 0 then completed = completed + 1 end end
+                                self.gui:setText("LeftValue_"..self.selected_index, tostring(completed))
+                            end
                             self.gui:setText("RightValue_"..self.selected_index, ""..#challenge.levelList)
                             self.gui:setButtonCallback( "ChallengeButton_"..self.selected_index, "client_pack_SelectChallenge" )
                             self.selected_index = self.selected_index + 1
@@ -63,11 +68,6 @@ if _G["ChallengeModeMenuPack_LoadFunctions"] == nil then
                         self.gui:setVisible("No_DownIcon", true)
                     end
                 end
-                -- print(self.offset)
-                -- if self.offset % 2 ~= 0 then
-                --     self.offset = self.offset + 1
-                --     self.gui:setVisible("ChallengePack_10", false)
-                -- end
                 if self.offset >= 2 then
                     self.gui:setVisible("UpIcon", true)
                     self.gui:setVisible("No_UpIcon", false)
@@ -78,6 +78,15 @@ if _G["ChallengeModeMenuPack_LoadFunctions"] == nil then
                 self.gui:open()
             end
             self.selected_index = -2
+
+            if self.times == nil or force then
+                self.network:sendToServer("server_fetchLevelData", {})
+            end
+        end
+
+        self.client_recieveLevelTimes = function( self, times )
+            self.times = times
+            self.ChallengeModeMenuPack_LOADED( self, self.offset, false)
         end
 
         self.client_SelectChallenge = function( self, button )

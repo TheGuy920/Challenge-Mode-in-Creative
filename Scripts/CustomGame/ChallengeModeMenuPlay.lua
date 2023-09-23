@@ -54,8 +54,24 @@ if _G["ChallengeModeMenuPlay_LoadFunctions"] == nil then
                         self.selected_index = self.selected_index + 1
                     end
                 end
+                self.gui:setVisible("RecordContainer", false)
+                self.gui:setText("ChallengeName", "")
                 self.gui:open()
             end
+
+            self.network:sendToServer("server_fetchLevelData", self.uuid)
+        end
+
+        self.client_recieveLevelTimes = function( self, times )
+            self.times = times
+            local completed = 0
+            local total = 0
+            for _,time in pairs(times) do
+                if time > 0 then completed = completed + 1 end
+                total = total + 1
+            end
+            self.gui:setText("RightValue", tostring(total))
+            self.gui:setText("LeftValue", tostring(completed))
         end
 
         self.client_SelectChallenge = function( self, button )
@@ -63,6 +79,18 @@ if _G["ChallengeModeMenuPlay_LoadFunctions"] == nil then
             self.selected_index = string.gsub(string.sub(button, -2), "_", "")
             self.gui:setVisible("PreviewSelectBorder_"..self.selected_index, true)
             self.gui:setVisible("SelectBorder_"..self.selected_index, true)
+            local level = self.challenge_levels[self.offset + self.selected_index + 1]
+            self.gui:setVisible("RecordContainer", true)
+            self.gui:setText("ChallengeName", level.name)
+            if self.times then
+                local passedTime = self.times[level.uuid]
+                local milliseconds = passedTime % 1.0
+                local seconds = (passedTime - milliseconds) % 60.0
+                local minutes = (passedTime - (seconds + milliseconds)) / 60
+                displayTime = string.format("%02i:%02i:%03i", minutes, seconds, milliseconds * 1000)
+                self.gui:setText("RecordTime", displayTime)
+            end
+            --self.gui:setText("RecordTimeLabel", "#{PLAYTIME}")
         end
 
         self.client_DeselectAll = function( self )

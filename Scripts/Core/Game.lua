@@ -215,18 +215,18 @@ function Game.server_exitToMenu2(self, data)
         self.ready = true
         self.network:sendToClients("client_closeTmp")
 
-        sm.game.setLimitedInventory(true)
-        for id,player in pairs(sm.player.getAllPlayers()) do
-            local inv = player:getInventory()
-            sm.container.beginTransaction()
-            for i = 1, inv:getSize() do
-                sm.container.setItem(inv, i - 1, sm.uuid.getNil(), 1)
-            end
-            if id == 1 or true then
-                self.network:sendToClient(player, "client_giveHammer")
-            end
-            sm.container.endTransaction()
-        end
+        -- sm.game.setLimitedInventory(true)
+        -- for id,player in pairs(sm.player.getAllPlayers()) do
+        --     local inv = player:getInventory()
+        --     sm.container.beginTransaction()
+        --     for i = 1, inv:getSize() do
+        --         sm.container.setItem(inv, i - 1, sm.uuid.getNil(), 1)
+        --     end
+        --     if id == 1 or true then
+        --         self.network:sendToClient(player, "client_giveHammer")
+        --     end
+        --     sm.container.endTransaction()
+        -- end
     end
 end
 
@@ -416,6 +416,43 @@ function Game.client_initializePlayMenu(self, uuid, force)
     self.network:sendToServer("server_updateGameState", States.PlayMenu)
 
     self.MenuInstance.play.gui:setFocus("xx01441")
+end
+
+function Game.server_fetchLevelData( self, data )
+    local return_data = {}
+    if tostring(type(data)) == "string" then
+        local pack_uuid = data
+        local pack = self.ChallengeData.packs[pack_uuid]
+        for _,level in pairs(pack.levelList) do
+            local uuid = sm.uuid.new(level.uuid)
+            local time = sm.challenge.getCompletionTime( uuid )
+            return_data[tostring(uuid)] = time
+        end
+    else
+        local pack_uuid_list = sm.json.open("$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070/Scripts/CustomGame/Json/LocalChallengeList.json").challenges
+        for _,c in pairs(sm.json.open("$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070/Scripts/CustomGame/Json/ChallengeList.json").challenges) do table.insert(pack_uuid_list, c) end
+        for _,pack_uuid in pairs(pack_uuid_list) do
+            local pack = self.ChallengeData.packs[pack_uuid]
+            if pack then
+                local level_data = {}
+                for _,level in pairs(pack.levelList) do
+                    local uuid = sm.uuid.new(level.uuid)
+                    local time = sm.challenge.getCompletionTime( uuid )
+                    level_data[tostring(uuid)] = time
+                end
+                return_data[pack_uuid] = level_data
+            end
+        end
+    end
+    self.network:sendToClients("client_recieveLevelTimes", return_data)
+end
+
+function Game.client_recieveLevelTimes( self, times )
+    if self.state == States.PlayMenu and sm.isHost then
+        self.MenuInstance.play.client_recieveLevelTimes(self.MenuInstance.play, times)
+    elseif self.state == States.PackMenu and sm.isHost then
+        self.MenuInstance.pack.client_recieveLevelTimes(self.MenuInstance.pack, times)
+    end
 end
 
 function Game.client_ScrollUp(self, button)
@@ -718,17 +755,18 @@ function Game.sv_createPlayerCharacter(self, world, x, y, player, params)
         player:setCharacter(character)
         if player == sm.host then
             sm.event.sendToWorld(world, "server_setMenuLock", character)
-            sm.game.setLimitedInventory(false)
-            sm.container.beginTransaction()
-            for i = 1, player:getHotbar():getSize() do
-                sm.container.setItem(player:getHotbar(), i - 1, sm.uuid.getNil(), 1)
-            end
-            sm.container.setItem(player:getHotbar(), 0, sm.uuid.new("9d4d51b5-f3a5-407f-a030-138cdcf30b4e"), 1)
-            sm.container.endTransaction()
-            sm.game.setLimitedInventory(true)
         else
             sm.event.sendToWorld(world, "server_setMenuLockNil", character)
         end
+
+        sm.game.setLimitedInventory(false)
+        sm.container.beginTransaction()
+        for i = 1, player:getHotbar():getSize() do
+            sm.container.setItem(player:getHotbar(), i - 1, sm.uuid.getNil(), 1)
+        end
+        sm.container.setItem(player:getHotbar(), 0, sm.uuid.new("9d4d51b5-f3a5-407f-a030-138cdcf30b4e"), 1)
+        sm.container.endTransaction()
+        sm.game.setLimitedInventory(true)
     end
 end
 
