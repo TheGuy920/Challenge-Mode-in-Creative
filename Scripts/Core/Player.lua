@@ -33,6 +33,7 @@ function Player.server_updateGameState(self, State, caller)
 	end
 	self.state = State
 
+	print("Sending Game state to clients", State)
 	self.network:sendToClients("client_updateGameState", State)
 
 	if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
@@ -53,6 +54,7 @@ function Player.client_updateGameState(self, State, caller)
 	if sm.isServerMode() or caller ~= nil then
 		return
 	end
+	print("Client recieved game state", State)
 	self.state = State
 end
 
@@ -163,7 +165,7 @@ function Player.client_onFixedUpdate(self, timeStep)
 end
 
 function Player.server_requestGameState( self, player )
-	print("Fetching Game State for", player)
+	print("Fetching Game State for", player, self.state)
 	if self.state ~= nil then
 		self.network:sendToClient(player, "client_updateGameState", self.state)
 	else
@@ -181,7 +183,8 @@ function Player.client_onUpdate(self, deltaTime)
 		end
 	end
 	self.client_onUpdate = function( self, deltaTime )
-		if self.state == nil then
+		if self.state == nil and not sm.isHost then
+			print(sm.isHost)
 			self.network:sendToServer("server_requestGameState", self.player)
 			return
 		end
