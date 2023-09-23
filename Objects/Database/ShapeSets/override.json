@@ -43,6 +43,26 @@
 			   "filename" : "$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070/Scripts/CustomGame/MenuLock.lua"
 			},
 			"uuid" : "b9e418dd-5875-4ca6-85f1-48154fa81643"
+		 },
+		 {
+			"box" : {
+			   "x" : 10,
+			   "y" : 10,
+			   "z" : 30
+			},
+			"color" : "ffffff",
+			"flammable" : false,
+			"name" : "invis_barrier",
+			"physicsMaterial" : "Glass",
+			"ratings" : {
+			   "buoyancy" : 1,
+			   "density" : 1,
+			   "durability" : 1,
+			   "friction" : 1
+			},
+			"renderable" : "$CHALLENGE_DATA/Objects/Renderable/interactive/obj_challenge_interactive_smallgoal.rend",
+			"rotationSet" : "PropYZNegX",
+			"uuid" : "d8669091-5ed8-41af-90dd-60e6f5d1f282"
 		 }
 	]
 }
