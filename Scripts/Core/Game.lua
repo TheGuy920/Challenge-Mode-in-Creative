@@ -708,7 +708,7 @@ function Game.sv_createPlayerCharacter(self, world, x, y, player, params)
     if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
         sm.event.sendToWorld(world, "server_spawnCharacter", {players = {player}, playCutscene = false})
     elseif sm.exists(world) then
-        local vector = sm.vec3.new(0, -90, 5)
+        local vector = sm.vec3.new(0, -92.5, 5)
         local yaw = math.pi
         if player == sm.host then
             vector = sm.vec3.new(0.8375, -112.725, 6)
