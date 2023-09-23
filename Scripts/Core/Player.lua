@@ -6,6 +6,11 @@ function Player.server_onCreate(self)
 	ChallengePlayer.server_onCreate(self)
 	self.start = sm.game.getCurrentTick()
 	sm.event.sendToGame("server_playerScriptReady", self.player)
+	self.network:sendToClient(self.player, "client_setPlayer", self.player)
+end
+
+function Player.client_setPlayer( self, player )
+	self.player = player
 end
 
 function Player.server_updateGameRules(self, rules)
