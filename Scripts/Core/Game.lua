@@ -687,9 +687,8 @@ function Game.sv_createPlayerCharacter(self, world, x, y, player, params)
         end
         local character = sm.character.createCharacter(player, world, vector, yaw, 0)
         player:setCharacter(character)
-
-        sm.event.sendToWorld(world, "server_setMenuLock", character)
         if player == sm.host then
+            sm.event.sendToWorld(world, "server_setMenuLock", character)
             sm.game.setLimitedInventory(false)
             sm.container.beginTransaction()
             for i = 1, player:getHotbar():getSize() do

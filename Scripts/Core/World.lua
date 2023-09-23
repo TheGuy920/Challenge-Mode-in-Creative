@@ -25,11 +25,12 @@ function World.server_onCreate( self )
 	if self.menu_lock == nil then
 		self.menu_lock = sm.shape.createPart( MenuLockUuid, sm.vec3.new(0,0,-500), nil, false, true ):getInteractable()
 	end
-	for _,player in pairs(sm.player.getAllPlayers()) do
+	local player = sm.player.getAllPlayers()[1]
+	--for _,player in pairs(sm.player.getAllPlayers()) do
 		if player:getCharacter() ~= nil then
 			player.character:setLockingInteractable(self.menu_lock)
 		end
-	end
+	--end
 end
 
 
@@ -122,7 +123,9 @@ function World.server_spawnCharacter( self, params )
 	print("World: spawnCharacter")
 	for _, player in ipairs( params.players ) do
 		local char = CreateCharacterOnSpawner( self, self.world, player, {}, sm.vec3.new( 0.8375, -112.725, 6 ), false )
-		char:setLockingInteractable(self.menu_lock)
+		if player == sm.player.getAllPlayers()[1] then
+			char:setLockingInteractable(self.menu_lock)
+		end
 		sm.event.sendToPlayer( player, "sv_e_onSpawnCharacter")
 		sm.container.beginTransaction()
 		for i=1,player:getHotbar():getSize() do
