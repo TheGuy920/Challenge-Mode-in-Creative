@@ -38,7 +38,6 @@ function Player.server_updateGameState( self, State, caller )
 		ChallengePlayer.server_onCreate( self )
 		self.network:sendToClient(self.player, "_client_onCreate")
     elseif self.player ~= sm.player.getAllPlayers()[1] then
-		print("WHIPE YUH INVENTORY BOY")
 		sm.container.beginTransaction()
 		local inv = self.player:getInventory()
 		for i = 1, inv:getSize() do
@@ -46,6 +45,7 @@ function Player.server_updateGameState( self, State, caller )
 		end
 		sm.container.setItem(inv, 0, sm.uuid.new("9d4d51b5-f3a5-407f-a030-138cdcf30b4e"), 1)
 		sm.container.endTransaction()
+		self.player:getCharacter():setLockingInteractable(nil)
 	end
 end
 

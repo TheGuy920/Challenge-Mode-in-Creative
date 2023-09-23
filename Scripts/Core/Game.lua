@@ -884,7 +884,7 @@ end
 
 function Game.client_onUpdate(self, deltaTime)
 
-    if self.MenuInstance.blur.blur_gui == nil or not sm.exists(self.MenuInstance.blur.blur_gui) then
+    if self.MenuInstance.blur.blur_gui == nil or not sm.exists(self.MenuInstance.blur.blur_gui) and sm.isHost then
         self.MenuInstance.blur.blur_gui =
             sm.gui.createGuiFromLayout(
             "$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070/Gui/Layouts/darken/darken_new.layout",
