@@ -619,7 +619,7 @@
                         <Widget type="Button" skin="PanelEmpty" position_real="0 0 1 1" name="ChallengeButton_11"/>
                     </Widget>
                 </Widget>
-                <Widget type="ScrollBar" skin="InventoryVSlider" position_real="0.95084897229669352 0.067241379310344823 0.025915996425379804 0.8603448275862069" name="ChallengePackScroll"/>
+                <Widget type="ScrollBar" skin="InventoryVSlider" position_real="0.94995531724754245 0.077586206896551727 0.026809651474530832 0.85344827586206895" name="ChallengePackScroll"/>
             </Widget>
             <Widget type="Widget" skin="NonBlurryBackgroundDarkRoundedLowerLeft" position_real="0 0.87163029525032087 1 0.12708600770218229">
                 <Widget type="Button" skin="SecondaryButton" position_real="0.031277926720285967 0.26262626262626265 0.21358355674709562 0.39393939393939392" name="ExitChallengePack">
@@ -690,12 +690,12 @@
                 </Widget>
             </Widget>
         </Widget>
-        <Widget type="ImageBox" skin="ImageBox" position_real="0.59479166666666672 0.74444444444444446 0.015625 0.027777777777777776" name="No_DownIcon">
+        <Widget type="ImageBox" skin="ImageBox" position_real="0.5942708333333333 0.73981481481481481 0.018229166666666668 0.031481481481481478" name="No_DownIcon">
             <Property key="ImageTexture" value="$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070\Gui\down.png"/>
             <Property key="Alpha" value="0.2"/>
             <Property key="Visible" value="false"/>
         </Widget>
-        <Widget type="ImageBox" skin="ImageBox" position_real="0.59479166666666672 0.26851851851851855 0.015625 0.027777777777777776" name="No_UpIcon">
+        <Widget type="ImageBox" skin="ImageBox" position_real="0.5942708333333333 0.26851851851851855 0.018229166666666668 0.031481481481481478" name="No_UpIcon">
             <Property key="ImageTexture" value="$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070\Gui\up.png"/>
             <Property key="Alpha" value="0.2"/>
             <Property key="Visible" value="false"/>

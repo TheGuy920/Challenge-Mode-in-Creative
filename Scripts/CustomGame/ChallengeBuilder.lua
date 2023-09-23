@@ -6,6 +6,7 @@ _G["ChallengeBuilder_LoadFunctions"] = function(self)
         local init = false
         if self.number_index == nil or force == true then
             self.number_index = {}
+            self.times = {}
             init = true
         end
 
@@ -17,7 +18,7 @@ _G["ChallengeBuilder_LoadFunctions"] = function(self)
         local index = 0
         if init then
             for _, level in pairs(self.challenge_levels) do
-                if level.isLocal then
+                if level.isLocal or not self.toggle then
                     table.insert(self.number_index, level)
                 end
             end
@@ -31,7 +32,9 @@ _G["ChallengeBuilder_LoadFunctions"] = function(self)
         for index,level in pairs(self.number_index) do
             if index >= self.offset and self.selected_index <= local_max + 3 then
                 self.gui:setVisible("ChallengeItem_" .. self.selected_index, true)
-                self.gui:setImage("Preview_" .. self.selected_index, level.image .. "")
+                local image_index = self.selected_index
+                if self.offset % 2 > 0 then image_index = image_index - 1 end
+                self.gui:setImage("Preview_" .. image_index, level.image .. "")
                 self.gui:setVisible("PreviewSelectBorder_" .. self.selected_index, false)
                 self.gui:setVisible("SelectBorder_" .. self.selected_index, false)
                 self.gui:setButtonCallback("Challenge_" .. self.selected_index, "client_level_SelectChallenge")
@@ -104,6 +107,26 @@ _G["ChallengeBuilder_LoadFunctions"] = function(self)
             end
             self.gui:setVisible("ChallengeIcon", true)
             self.gui:setImage("ChallengeIcon", self.number_index[index].image .. "")
+
+            if not self.times[uuid] then
+                self.network:sendToServer("server_fetchLevelData", uuid)
+            else
+                if self.times[uuid] > 0 then
+                    self.gui:setVisible("RecordContainer", true)
+                    self.gui:setVisible("HaveToBeatText", false)
+                    self.gui:setVisible("HaveToBeatText2", false)
+                    local passedTime = self.times[uuid]
+                    local milliseconds = passedTime % 1.0
+                    local seconds = (passedTime - milliseconds) % 60.0
+                    local minutes = (passedTime - (seconds + milliseconds)) / 60
+                    displayTime = string.format("%02i:%02i:%03i", minutes, seconds, milliseconds * 1000)
+                    self.gui:setText("RecordTime", displayTime)
+                else
+                    self.gui:setVisible("RecordContainer", false)
+                    self.gui:setVisible("HaveToBeatText", true)
+                    self.gui:setVisible("HaveToBeatText2", true)
+                end
+            end
         else
             self.gui:setText("EditText_Title", "")
             self.gui:setVisible("DefaultText_Title", true)
@@ -111,6 +134,26 @@ _G["ChallengeBuilder_LoadFunctions"] = function(self)
             self.gui:setVisible("DefaultText_Description", true)
             self.gui:setVisible("ChallengeIcon", false)
         end
+    end
+
+    self.client_toggleShowing = function ( self )
+        self.toggle = not self.toggle
+        print("MORE BETTER TOGGLE")
+        if self.toggle then
+            self.gui:setText("Toggle", "LOCAL")
+        else
+            self.gui:setText("Toggle", "ALL")
+        end
+        self.ChallengeBuilder_LOADED(self, self.offset, true)
+    end
+
+    self.client_recieveLevelTimes = function( self, table )
+        for uuid,time in pairs(table) do
+            if not self.times[uuid] then
+                self.times[uuid] = time
+            end
+        end
+        self:client_loadChallengeData() 
     end
 
     self.client_readFile = function(self, uuid, dir, inPack, isLocal)

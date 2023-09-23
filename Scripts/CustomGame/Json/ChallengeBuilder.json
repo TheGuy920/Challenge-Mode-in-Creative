@@ -27,6 +27,10 @@
         {
             "name": "DownArrow",
             "method": "client_ScrollDown"
+        },
+        {
+            "name": "Toggle",
+            "method": "client_toggleShowing"
         }
     ],
     "text": [

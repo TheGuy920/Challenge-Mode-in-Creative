@@ -51,8 +51,8 @@ if not sm.old then
         levelCompleted = function(string, time, data)
             sm.old.challenge.levelCompleted(string, time, data)
         end,
-        getCompletionTime = function(string, time, data)
-            return sm.old.challenge.getCompletionTime(string)
+        getCompletionTime = function(uuid)
+            return sm.old.challenge.getCompletionTime(uuid)
         end,
         isMasterMechanicTrial = function() return false end
     }

@@ -33,10 +33,13 @@ function Game.server_onCreate(self)
     self.ChallengeData = LoadChallengeData()
     self:server_updateGameState(States.PackMenu)
     self.ready = true
+
+    print(sm.challenge.getSaveData( sm.uuid.new("1a52108f-7704-4221-8ba1-bad5c933d7ba") ))
+    print(sm.challenge.getCompletionTime( sm.uuid.new("1a52108f-7704-4221-8ba1-bad5c933d7ba") ))
 end
 
 function Game.client_test(self)
-    print("YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+    --print("YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 end
 
 function Game.client_initializeMenu(self, force)
@@ -75,6 +78,7 @@ function Game.client_initializeMenu(self, force)
             build = {
                 gui = nil,
                 network = self.network,
+                toggle = true,
                 challenge_levels = self.ChallengeData.levels
             },
             play = {
@@ -423,10 +427,19 @@ function Game.server_fetchLevelData( self, data )
     if tostring(type(data)) == "string" then
         local pack_uuid = data
         local pack = self.ChallengeData.packs[pack_uuid]
-        for _,level in pairs(pack.levelList) do
-            local uuid = sm.uuid.new(level.uuid)
-            local time = sm.challenge.getCompletionTime( uuid )
-            return_data[tostring(uuid)] = time
+        if pack then
+            for _,level in pairs(pack.levelList) do
+                local uuid = sm.uuid.new(level.uuid)
+                local time = sm.challenge.getCompletionTime( uuid )
+                return_data[tostring(uuid)] = time
+            end
+        else
+            local level = self.ChallengeData.levels[pack_uuid]
+            if level then
+                local uuid = sm.uuid.new(level.uuid)
+                local time = sm.challenge.getCompletionTime( uuid )
+                return_data[pack_uuid] = time
+            end
         end
     else
         local pack_uuid_list = sm.json.open("$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070/Scripts/CustomGame/Json/LocalChallengeList.json").challenges
@@ -452,6 +465,8 @@ function Game.client_recieveLevelTimes( self, times )
         self.MenuInstance.play.client_recieveLevelTimes(self.MenuInstance.play, times)
     elseif self.state == States.PackMenu and sm.isHost then
         self.MenuInstance.pack.client_recieveLevelTimes(self.MenuInstance.pack, times)
+    elseif self.state == States.BuildMenu and sm.isHost then
+        self.MenuInstance.build.client_recieveLevelTimes(self.MenuInstance.build, times)
     end
 end
 
@@ -472,6 +487,12 @@ function Game.client_ScrollDown(self, button)
         self.MenuInstance.play.ChallengeModeMenuPlay_LOADED(self.MenuInstance.play, self.MenuInstance.play.offset + 3)
     elseif self.state == States.BuildMenu then
         self.MenuInstance.build.ChallengeBuilder_LOADED(self.MenuInstance.build, self.MenuInstance.build.offset + 4)
+    end
+end
+
+function Game.client_toggleShowing(self)
+    if self.state == States.BuildMenu and sm.isHost then
+        self.MenuInstance.build.client_toggleShowing(self.MenuInstance.build)
     end
 end
 
