@@ -42,6 +42,10 @@
 			   "data" : {},
 			   "filename" : "$CONTENT_ee7f6b44-e9e8-4636-89ce-e7f5fd41c070/Scripts/CustomGame/MenuLock.lua"
 			},
+			"restrictions": {
+				"erasable": false
+			},
+			"showInInventory": false,
 			"uuid" : "b9e418dd-5875-4ca6-85f1-48154fa81643"
 		 },
 		 {
@@ -60,6 +64,10 @@
 			   "durability" : 1,
 			   "friction" : 1
 			},
+			"restrictions": {
+				"erasable": false
+			},
+			"showInInventory": false,
 			"renderable" : "$GAME_DATA/Objects/Renderable/Interactive/obj_interactive_logicgate.rend",
 			"rotationSet" : "PropYZNegX",
 			"uuid" : "d8669091-5ed8-41af-90dd-60e6f5d1f282"
@@ -80,6 +88,10 @@
 			   "durability" : 1,
 			   "friction" : 1
 			},
+			"restrictions": {
+				"erasable": false
+			},
+			"showInInventory": false,
 			"renderable" : "$GAME_DATA/Objects/Renderable/Interactive/obj_interactive_logicgate.rend",
 			"rotationSet" : "PropYZNegX",
 			"uuid" : "1be96842-cb7d-4748-b159-3dbc61ca1f40"

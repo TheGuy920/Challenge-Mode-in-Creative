@@ -19,10 +19,10 @@ local OrderList = {
 	BarrierUuidY
 }
 local posOffset = {
-	sm.vec3.new(-0.1,0,0),
-	sm.vec3.new(0.1,0,0),
-	sm.vec3.new(0,-0.1,0),
-	sm.vec3.new(0,0.1,0)
+	sm.vec3.new(-0.4,0,0),
+	sm.vec3.new(0.4,0,0),
+	sm.vec3.new(0,-0.4,0),
+	sm.vec3.new(0,0.4,0)
 }
 
 function World.server_onCreate( self )
@@ -50,7 +50,7 @@ function World.server_onCreate( self )
 		self.barrier = {}
 		for index = 1, 4 do
 			print(index)
-			table.insert(self.barrier, sm.shape.createPart( OrderList[index], sm.vec3.new(0.8375, -112.725, 0), nil, false, true ))
+			table.insert(self.barrier, sm.shape.createPart( OrderList[index], sm.vec3.new(0.8375, -112.725, 6) + posOffset[index], nil, false, true ))
 		end
 	end
 	local host = sm.player.getAllPlayers()[1]
