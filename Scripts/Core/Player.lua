@@ -6,11 +6,6 @@ function Player.server_onCreate(self)
 	ChallengePlayer.server_onCreate(self)
 	self.start = sm.game.getCurrentTick()
 	sm.event.sendToGame("server_playerScriptReady", self.player)
-	self.network:sendToClient(self.player, "client_setPlayer", self.player)
-end
-
-function Player.client_setPlayer( self, player )
-	self.player = player
 end
 
 function Player.server_updateGameRules(self, rules)
@@ -189,8 +184,7 @@ function Player.client_onUpdate(self, dt)
 		return
 	end
 	if self.state == nil and not sm.isHost then
-		print(self.state, sm.isHost, self.player, sm.localPlayer.getPlayer())
-		self.network:sendToServer("server_requestGameState", self.player)
+		self.network:sendToServer("server_requestGameState", sm.localPlayer.getPlayer())
 		return
 	end
 	if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
@@ -335,7 +329,7 @@ end
 
 function Player._client_onLoadingScreenLifted(self)
 	if self.state == States.PackMenu or self.state == States.PlayMenu then
-		if self.player.character ~= nil then
+		if sm.localPlayer.getPlayer().character ~= nil then
 			self.network:sendToServer("server_destroyCharacter")
 		end
 	end
