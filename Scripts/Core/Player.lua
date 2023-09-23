@@ -173,24 +173,23 @@ function Player.server_requestGameState( self, player )
 	end
 end
 
-function Player.client_onUpdate(slf, dt)
-	if slf.client_updateGameState == nil and not sm.isHost then
+function Player.client_onUpdate(self, dt)
+	if not sm.isHost and self.client_updateGameState == nil then
 		for index, value in pairs(Player) do
 			local found = string.find(tostring(type(value)), "function")
 			if found then
-				slf[index] = value
+				self[index] = value
 			end
 		end
+		return
 	end
-	slf.client_onUpdate = function( self, deltaTime )
-		if self.state == nil and not sm.isHost then
-			print(self.state, sm.isHost, self.player)
-			self.network:sendToServer("server_requestGameState", self.player)
-			return
-		end
-		if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
-			ChallengePlayer.client_onUpdate(self, deltaTime)
-		end
+	if self.state == nil and not sm.isHost then
+		print(self.state, sm.isHost, self.player)
+		self.network:sendToServer("server_requestGameState", self.player)
+		return
+	end
+	if self.state == States.Play or self.state == States.PlayBuild or self.state == States.Build then
+		ChallengePlayer.client_onUpdate(self, deltaTime)
 	end
 end
 
